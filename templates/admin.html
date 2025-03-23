@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+    <style>
+        .message-success { color: green; }
+        .message-error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="message-{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Users section -->
+    <h2>Users:</h2>
+    <ul>
+    {% for user in users %}
+        <li>
+            <a href="{{ url_for('user_submissions', user_id=user.id) }}">{{ user.name }}</a> - {{ user.email }}
+        </li>
+    {% endfor %}
+    </ul>
+    
+    <!-- Kits management section -->
+    <h2>Manage Kits:</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <input type="text" name="new_kit" placeholder="Enter new kit name" required>
+        <input type="submit" value="Add Kit">
+    </form>
+    
+    <h3>Current Kits:</h3>
+    {% if kits %}
+        <ul>
+        {% for kit in kits %}
+            <li>
+                {{ kit.name }}
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="kit_id" value="{{ kit.id }}">
+                    <input type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No kits defined yet.</p>
+    {% endif %}
+    
+    <br>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

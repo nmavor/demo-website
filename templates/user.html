@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Page</title>
+    <style>
+        .message-success { color: green; }
+        .message-error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Hi {{ name }}!</h1>
+    
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="message-{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Form with input and dropdown -->
+    <form method="POST">
+        <label for="link">Link:</label><br>
+        <input type="text" id="link" name="link" required><br><br>
+        
+        <label for="kit">Select Kit:</label><br>
+        <select id="kit" name="kit" required>
+            {% for kit in kits %}
+                <option value="{{ kit }}">{{ kit }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+    
+    <br>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
